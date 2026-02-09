@@ -1,0 +1,168 @@
+-- CONFIG
+local correctKey = "test"
+local discordLink = "https://discord.gg/yourdiscord"
+local keyFileName = "ZynexHub_key"
+
+local savedKey
+if isfile(keyFileName) then
+	savedKey = readfile(keyFileName)
+end
+
+if savedKey == correctKey then
+	loadstring(game:HttpGet(scriptLink))()
+	return
+end
+
+-- UI phần tử
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "KeyUI"
+gui.ResetOnSpawn = false
+
+-- UI chính
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 260)
+frame.Position = UDim2.new(0.5, 0, -1, 0) -- animation từ trên xuống
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
+
+-- Tween animation hiện ra
+local tweenService = game:GetService("TweenService")
+local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+tweenService:Create(frame, tweenInfo, {
+	Position = UDim2.new(0.5, 0, 0.5, 0),
+	Size = UDim2.new(0, 400, 0, 260)
+}):Play()
+
+-- Thông báo nhỏ khi mở UI
+pcall(function()
+    game:GetService("StarterGui"):SetCore(
+        "SendNotification",
+        {
+            Title = "Key System",
+            Text = "Made by Zynex Hub.",
+            Icon = "rbxthumb://type=Asset&id=118829242265386&w=150&h=150",
+            Duration = 6
+        }
+    )
+end)
+
+-- Logo ROBLOX (rõ ràng)
+local logo = Instance.new("ImageLabel", frame)
+logo.Size = UDim2.new(0, 48, 0, 48)
+logo.Position = UDim2.new(0.5, -24, 0, 12)
+logo.BackgroundTransparency = 1
+logo.Image = "rbxassetid://118829242265386" -- Roblox logo rõ nét
+
+-- Dòng thông báo
+local label = Instance.new("TextLabel", frame)
+label.Size = UDim2.new(1, -20, 0, 25)
+label.Position = UDim2.new(0, 10, 0, 65)
+label.Text = "How do I get key? Key in Discord Server!"
+label.TextColor3 = Color3.new(1, 1, 1)
+label.TextSize = 15
+label.Font = Enum.Font.Gotham
+label.BackgroundTransparency = 1
+
+-- Ô nhập key
+local textbox = Instance.new("TextBox", frame)
+textbox.Size = UDim2.new(1, -40, 0, 38)
+textbox.Position = UDim2.new(0.5, -180, 0, 100)
+textbox.PlaceholderText = "Enter Key Here..."
+textbox.Text = ""
+textbox.TextColor3 = Color3.new(1, 1, 1)
+textbox.PlaceholderColor3 = Color3.fromRGB(170, 170, 170)
+textbox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+textbox.BorderSizePixel = 0
+textbox.Font = Enum.Font.Gotham
+textbox.TextSize = 16
+Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 6)
+
+-- Nút Get DC
+local getBtn = Instance.new("TextButton", frame)
+getBtn.Size = UDim2.new(0.48, -10, 0, 42)
+getBtn.Position = UDim2.new(0, 10, 0, 155)
+getBtn.Text = "Get DC Link"
+getBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
+getBtn.TextColor3 = Color3.new(1, 1, 1)
+getBtn.Font = Enum.Font.GothamBold
+getBtn.TextSize = 16
+getBtn.BorderSizePixel = 0
+Instance.new("UICorner", getBtn).CornerRadius = UDim.new(0, 10)
+
+-- Nút X đóng UI
+local closeBtn = Instance.new("TextButton", frame)
+closeBtn.Size = UDim2.new(0, 24, 0, 24)
+closeBtn.Position = UDim2.new(1, -28, 0, 4)
+closeBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 14
+closeBtn.BorderSizePixel = 0
+Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(1, 0)
+
+closeBtn.MouseButton1Click:Connect(function()
+	tweenService:Create(frame, TweenInfo.new(0.3), {
+		Size = UDim2.new(0, 0, 0, 0),
+		Position = UDim2.new(0.5, 0, 0.5, 0)
+	}):Play()
+	wait(0.3)
+	gui:Destroy()
+end)
+
+-- Nút Check
+local checkBtn = Instance.new("TextButton", frame)
+checkBtn.Size = UDim2.new(0.48, -10, 0, 42)
+checkBtn.Position = UDim2.new(0.52, 0, 0, 155)
+checkBtn.Text = "Check Key"
+checkBtn.BackgroundColor3 = Color3.fromRGB(80, 255, 80)
+checkBtn.TextColor3 = Color3.new(1, 1, 1)
+checkBtn.Font = Enum.Font.GothamBold
+checkBtn.TextSize = 16
+checkBtn.BorderSizePixel = 0
+Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 10)
+
+-- Thông báo nhỏ
+local function notify(text, color)
+	local msg = Instance.new("TextLabel", gui)
+	msg.Size = UDim2.new(0, 300, 0, 35)
+	msg.Position = UDim2.new(0.5, -150, 0.87, 0)
+	msg.BackgroundColor3 = color
+	msg.Text = text
+	msg.TextColor3 = Color3.new(1, 1, 1)
+	msg.Font = Enum.Font.GothamBold
+	msg.TextSize = 16
+	msg.Name = "KeyNotify"
+	msg.BackgroundTransparency = 0.2
+	Instance.new("UICorner", msg).CornerRadius = UDim.new(0, 6)
+	game.Debris:AddItem(msg, 2.5)
+end
+
+-- Chức năng nút
+getBtn.MouseButton1Click:Connect(function()
+	setclipboard(discordLink)
+	notify("Discord link copied!", Color3.fromRGB(0, 170, 255))
+end)
+
+checkBtn.MouseButton1Click:Connect(function()
+	if textbox.Text == correctKey then
+		writefile(keyFileName, textbox.Text)
+		notify("Correct key! Loading...", Color3.fromRGB(0, 200, 0))
+
+		-- Animate biến mất nhanh
+		tweenService:Create(frame, TweenInfo.new(3), {
+			Size = UDim2.new(0, 0, 0, 0),
+			Position = UDim2.new(0.5, 0, 0.5, 0)
+		}):Play()
+
+		wait(3)
+		gui:Destroy()
+		loadstring(game:HttpGet(scriptLink))()
+	else
+		notify("Wrong key!", Color3.fromRGB(255, 0, 0))
+	end
+end)2
