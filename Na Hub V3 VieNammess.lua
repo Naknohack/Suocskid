@@ -2396,10 +2396,37 @@ QuestNeta = function()
 			[6] = PosQ,
 		};
 	end;
-	local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/UiRedzhub.lua"))():MakeWindow({
+		local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/UiRedzhub.lua"))():MakeWindow({
     Title = "Nak Hub V3",
     SubTitle = "by Naknohack",
     SaveFolder = "Nak Hub"
+})
+
+-- 🔥 FIX SCROLL TAB (QUAN TRỌNG)
+task.spawn(function()
+    wait(1)
+
+    for _,v in pairs(game.CoreGui:GetDescendants()) do
+        -- mở rộng vùng tab (fix bị cắt)
+        if v:IsA("Frame") and (v.Name:lower():find("tab") or v.Name:lower():find("container")) then
+            v.ClipsDescendants = false
+        end
+
+        -- nếu có scrolling thì mở rộng
+        if v:IsA("ScrollingFrame") then
+            v.ScrollBarThickness = 6
+            v.CanvasSize = UDim2.new(0,0,0,3000)
+        end
+
+        -- fix layout bị tràn
+        if v:IsA("UIListLayout") then
+            local parent = v.Parent
+            if parent and parent:IsA("Frame") then
+                parent.Size = parent.Size + UDim2.new(0,0,0,600)
+            end
+        end
+    end
+end)
 })
 -- Criar ScreenGui
 local screenGui = Instance.new("ScreenGui")
